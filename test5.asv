@@ -1,53 +1,27 @@
-test=imread('image/rtest_31.jpg');
-test=imresize(test,0.5);
-% figure,imshow(test);
+clc; clear all;
+%% 参数设置
+thres_extraction_bw=0.29;
+thres_resize=0.5;
+imagePath='image/rtest_11.jpg';
 
-%% 根据颜色将手掌分出
-r=test(:,:,1);
-g=test(:,:,2);
-b=test(:,:,3);
-flags=(r>b).*(g>b);
-test=im2double(test);
-ett(:,:,:)=test(:,:,:).*flags;
-% figure,imshow(extraction);
+%% 
+src=imread(imagePath);
+src=imresize(src,thres_resize);
+% src_gray=rgb2gray(src);
+% figure('name','原图'),imshow(src),title('原图');
 
-bw=im2bw(ett,0.3);
-rode = imerode(bw,strel('square',55));%腐蚀
-figure,imshow(rode),title('rode');
-[L num]=bwlabel(rode);
-figure,imshow(L),title('L');
+palm=PalmExtraction(src,thres_extraction_bw);
+% figure('name','提取出的手掌'),imshow(palm),title('提取出的手掌');
 
-img=maxLianTongYu(
-figure,imshow(J),title('J');
+palm_gray=rgb2gray(palm);
+% figure,imshow(palm_gray),title('palmgray');
 
-% 找出最大的连通分量 手掌
-max = 0; % 当前最大连通分量的大小
-indMax = 0; % 当前最大连通分量的索引
-for k = 1:num
-    [y x] = find(L == k); % 找出编号为k的连通区的行索引集合y和列索引集合x
 
-    nSize = length(y); %计算该连通区中的像素数目
-    if(nSize > max)
-        max = nSize;
-        indMax = k;
-    end
-end
+% palm_bw=im2bw(palm,0.45);
+% figure,imshow(palm_bw),title('palmBW');
 
-if indMax == 0
-    disp('没有找到连通分量')
-    return
-end
-
-% 计算并显示最大连通分量 手掌 的中心
-[y x] = find(L == indMax);
-yMean = mean(y);
-xMean = mean(x);
-plot(xMean, yMean, 'Marker', 'o', 'MarkerSize', 14, 'MarkerEdgeColor', 'w', 'MarkerFaceColor', 'w');
-plot(xMean, yMean, 'Marker', '*', 'MarkerSize', 12, 'MarkerEdgeColor', 'k'); % 得到8.24(c)
 %%
 % c=corner(rgb2gray(test),10);
 % figure,imshow(test);
 % hold on;
 % plot(c(:,1),c(:,2),'r*');
-
-% edgeTest(test*1.5);

@@ -1,34 +1,23 @@
 clc; clear all;
+%% 参数设置
+thres_extraction_bw=0.29;
+thres_resize=0.5;
+imagePath='image/rtest_101.jpg';
 
-bw_thres=0.29;
+%% 
+src=imread(imagePath);
+src=imresize(src,thres_resize);
+% src_gray=rgb2gray(src);
+figure('name','原图'),imshow(src),title('原图');
 
-test=imread('image/rtest_121.jpg');
-test=imresize(test,0.5);
-test_gray=rgb2gray(test);
-figure,subplot(1,2,1),imshow(test),title('src');
+palm=PalmExtraction(src,thres_extraction_bw);
+figure('name','提取出的手掌'),imshow(palm),title('提取出的手掌');
 
-%% 提取手掌
-r=test(:,:,1);
-g=test(:,:,2);
-b=test(:,:,3);
-flags=(r>b).*(g>b);
-test=im2double(test);
-ett(:,:,:)=test(:,:,:).*flags;
-% figure,imshow(extraction);
+% palm_gray=rgb2gray(palm);
+% figure,imshow(palm_gray),title('palmgray');
 
-bw=im2bw(ett,bw_thres);
-% rode = imerode(bw,strel('square',55));%腐蚀
-% figure,imshow(rode),title('rode');
-[L num]=bwlabel(bw);
-% figure,imshow(L),title('L');
-
-img=maxLianTongYu(bw);
-subplot(1,2,2),imshow(img),title('extraction');
-
-img=im2double(img);
-test(:,:,:)=test(:,:,:).*img;
-% edgeTest(test);
-
+% palm_bw=im2bw(palm,0.45);
+% figure,imshow(palm_bw),title('palmBW');
 
 %%
 % c=corner(rgb2gray(test),10);
