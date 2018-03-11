@@ -16,14 +16,15 @@ out(:,:,:)=out(:,:,:).*flags;
 % figure,imshow(extraction);
 %% 根据最大连通域进一步提取
 bw=im2bw(out,thres_bw);
-[L num]=bwlabel(bw);
+[L num]=bwlabel(bw,4);
 img=maxLianTongYu(bw);
 img=im2double(img);
 % img=imerode(img,strel('disk',20));
 % img=imdilate(img,strel('disk',10));
 % img=imdilate(img,strel('disk',40));
 img=imopen(img,strel('disk',10));
-img=imdilate(img,strel('disk',25));
+img=imdilate(img,strel('disk',40));
+% img=imclose(img,strel('disk',25));
 % img=imerode(img,strel('line',10,90));
 % img=imclose(img,strel('disk',10));
 out=out(:,:,:).*img;
