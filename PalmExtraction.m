@@ -18,6 +18,9 @@ flags=imclose(flags,strel('disk',10));
 % flags=imclose(flags,strel('disk',10));
 flags=maxLianTongYu(flags);
 % flags2=imdilate(flags,strel('disk',30));
+% for i=[1:3]
+%     out(:,:,i)=out(:,:,i).*flags;
+% end
 out(:,:,:)=out(:,:,:).*flags;
 % figure,imshow(extraction);
 %% 根据最大连通域进一步提取
