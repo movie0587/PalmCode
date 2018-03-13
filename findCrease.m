@@ -1,31 +1,30 @@
-function out = findCrease(src,length,height,lenHeightRate);
+function out = findCrease(src,length,height);
 
 % ∂®Œª’€∫€Œª÷√
 narginchk(3,4);
 nargoutchk(0,1);
-if nargin<4
-    lenHeightRate=0.6;
-end
+
 if ndims(src)==3
     bw=~imbinarize(src);
 else
     bw=~src;
 end
+bw=medfilt2(bw);
 [row,col]=size(src);
-row=uint8(row);
-col=uint8(col);
+row=uint16(row);
+col=uint16(col);
 
 out=zeros(1,2);
-for i=[1:length:col-1]
-    for j=[1:height:row-1]
+for i=[1:height:(row-height)/2]
+    for j=[1:length:col-length]
         win=bw(i:i+height-1 ,j:j+length-1);
         sumRow=max(sum(win, 2));
         sumCol=max(sum(win, 1));
         rate=sumRow/sumCol;
-        if rate>2
-            figure,imshow(win);
+        if rate>1.2
+%             figure,imshow(win);
             [i, j, sumRow, sumCol, rate]
-            out=[out;j,row-i];
+            out=[out;j,i];
         end
     end
 end

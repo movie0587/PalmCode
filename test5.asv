@@ -1,8 +1,9 @@
 clc; clear all;
 %% 参数设置
-thres_extraction_bw=0.31;
+global thres_extraction_bw;
 thres_resize=0.2;
-imagePath='image/ltest_42.jpg';
+imagePath='image/ltest_101.jpg';
+
 
 %% 手掌提取
 src=imread(imagePath);

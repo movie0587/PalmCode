@@ -1,18 +1,18 @@
 clc; clear all;
 
-thres_resize=0.2;
-length=uint16(thres_resize*360*0.6);
-height=uint16(thres_resize*300*1.1);
-thres_bw=0.3;
+zoomRate=0.2;
+length=uint16(zoomRate*360*0.6);
+height=uint16(zoomRate*300*1.1);
+thres_bw=0.1;
 
-I = imread('image\rtest_31.jpg');
-I=imresize(I,thres_resize);
+I = imread('D:\±ÏÉè\matlabCode\image\rtest_121.jpg');
+I=imresize(I,zoomRate);
 I=PalmExtraction(I);
-figure,imshow(I);
+
 if ndims(I)>2
     I=rgb2gray(I);
 end
-figure,imshow(I);
+% figure,imshow(I);
 % I=medfilt2(I);
 
 gaborArray = gabor([13],[90],'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',5.0);
@@ -21,9 +21,9 @@ gaborMag = imgaborfilt(I,gaborArray);
 
 for p = 1:1
     palm=gaborMag(:,:,p);
-%     palm=adjgamma(palm);%Í¼ÏñÔöÇ¿
+    palm=adjgamma(palm);
     palm=imbinarize(palm);
-    figure,imshow(palm),title('zengqiang');
+    figure,imshow(imbinarize(,thres_bw)),title('zengqiang');
 %     figure,imshow((gaborMag(:,:,p)));
     theta = gaborArray(p).Orientation;
     lambda = gaborArray(p).Wavelength;
