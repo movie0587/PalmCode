@@ -3,7 +3,7 @@ function out = PalmExtraction(source,thres_bw);
 narginchk(1,2);
 nargoutchk(0,1);
 if nargin<2
-    thres_bw=0.29;
+    thres_bw=0.31;
 end
 
 %% 根据颜色提取手掌

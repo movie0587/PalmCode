@@ -1,14 +1,13 @@
 clc; clear all;
 
-zoomRate=0.2;
-length=uint16(zoomRate*360*0.6);
-height=uint16(zoomRate*300*1.1);
-thres_bw=0.1;
+thres_resize=0.2;
+length=uint16(thres_resize*360*0.6);
+height=uint16(thres_resize*300*1.1);
+thres_bw=0.31;
 
-I = imread('D:\±ÏÉè\matlabCode\image\rtest_121.jpg');
-I=imresize(I,zoomRate);
-I=PalmExtraction(I);
-
+I = imread('image\rtest_31.jpg');
+I=imresize(I,thres_resize);
+I=PalmExtraction(I,thres_bw);
 if ndims(I)>2
     I=rgb2gray(I);
 end
@@ -19,18 +18,21 @@ gaborArray = gabor([13],[90],'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio
 
 gaborMag = imgaborfilt(I,gaborArray);
 
-for p = 1:1
-    palm=gaborMag(:,:,p);
-    palm=adjgamma(palm);
-    palm=imbinarize(palm);
-    figure,imshow(imbinarize(,thres_bw)),title('zengqiang');
-%     figure,imshow((gaborMag(:,:,p)));
-    theta = gaborArray(p).Orientation;
-    lambda = gaborArray(p).Wavelength;
-    title(sprintf('Orientation=%d, Wavelength=%d',theta,lambda));
-end
+% for p = 1:1
+%     palm=gaborMag(:,:,p);
+% %     palm=adjgamma(palm);%Í¼ÏñÔöÇ¿
+%     palm=imbinarize(palm);
+%     figure,imshow(palm),title('zengqiang');
+% %     figure,imshow((gaborMag(:,:,p)));
+%     theta = gaborArray(p).Orientation;
+%     lambda = gaborArray(p).Wavelength;
+%     title(sprintf('Orientation=%d, Wavelength=%d',theta,lambda));
+% end
 
-
+palm=gaborMag(:,:,1);
+palm=imbinarize(palm);
+Identify_Object(palm);
+% figure,imshow(palm);
 
 % crease=findCrease(imbinarize(gaborMag(:,:,1),thres_bw),length,height);
 % [row,col]=size(crease);
