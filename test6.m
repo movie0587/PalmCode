@@ -1,14 +1,19 @@
-global i j;
-i=1;
-j=1;
-while i < (row-height)/2
-    while j < col-length
-        win=bw(i:i+height-1 ,j:j+length-1);
-        flag=identifyCrease(win,rate);
-        if flag == 1
-            out=[out; j,i];
-        end
-        j=j+1;
-    end
-    i=i+1;
+clc; clear all;
+
+thres_resize=0.2;
+length=uint16(thres_resize*360*0.6);
+height=uint16(thres_resize*300);
+thres_bw=0.31;
+
+identifyCreaseAngleThres=15;
+
+I = imread('image\rtest_11.jpg');
+I=imresize(I,thres_resize);
+
+palm=PalmExtraction(I,thres_bw);
+if ndims(palm)>2
+    palm=rgb2gray(palm);
 end
+
+[com,response]=FingerprintCompCode(palm);
+figure,imshow(imbinarize(response,0.01));

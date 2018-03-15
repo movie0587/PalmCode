@@ -19,10 +19,23 @@ for i = 1:LengthFiles
         img=rgb2gray(img);
     end
     
-    gaborArray = gabor([13],[90],'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',5.0);
-    gaborMag = imgaborfilt(img,gaborArray);
+    %     gaborArray = gabor([13],[90],'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',5.0);
+    %     gaborMag = imgaborfilt(img,gaborArray);
     
-    palm=gaborMag(:,:,1);
+    [row,col]=size(img);
+    gaborArray = gabor([11 12 13],[0 15 30 45 60 75 90 105 120 135 150 165 180 195 210 225 240 255 270 285 300 315 330 345 360],...
+        'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',3.5);
+    
+    gaborMag = imgaborfilt(img,gaborArray);
+    palm2=zeros(size(img));
+    
+    for i=1:row
+        for j=1:col
+            palm2(i,j)=min(gaborMag(i,j,:));
+        end
+    end
+    palm=palm2;
+%     palm=gaborMag(:,:,1);
     palm=imbinarize(palm);
     palm=bwAreaFilter(palm,50);
     
