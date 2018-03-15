@@ -2,8 +2,10 @@ clc; clear all;
 
 thres_resize=0.2;
 length=uint16(thres_resize*360*0.6);
-height=uint16(thres_resize*300*1.1);
+height=uint16(thres_resize*300);
 thres_bw=0.31;
+
+identifyCreaseAngleThres=15;
 
 I = imread('image\rtest_11.jpg');
 I=imresize(I,thres_resize);
@@ -30,16 +32,18 @@ gaborMag = imgaborfilt(I,gaborArray);
 % end
 
 palm=gaborMag(:,:,1);
-palm=~imbinarize(palm);
-figure,imshow(palm);
-palm=Identify_Object(palm,40);
-figure,imshow(palm);
+palm=imbinarize(palm);
+palm=bwAreaFilter(palm,50);
+% palm=imerode(palm,strel('line',2,0));
+% figure,imshow(palm);
+% palm=findCrease(palm,length,height,20,1.5);
+% figure,imshow(palm);
 
-% crease=findCrease(imbinarize(gaborMag(:,:,1),thres_bw),length,height);
-% [row,col]=size(crease);
-% figure,imshow(imbinarize(gaborMag(:,:,1),thres_bw));
-% hold on;
-% for i=2:row
-%     rect = rectangle('Position',[crease(i,1),crease(i,2),length,height]);
-%     set(rect,'edgecolor','r');
-% end
+crease=findCrease(palm,length,height,5,identifyCreaseAngleThres)
+[row,col]=size(crease);
+figure,imshow(palm);
+hold on;
+for i=2:row
+    rect = rectangle('Position',[crease(i,1),crease(i,2),length,height]);
+    set(rect,'edgecolor','r');
+end

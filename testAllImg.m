@@ -1,11 +1,37 @@
 clc; clear all;
 %测试所有照片
-bw_thres=0.31;
+
+
 files = dir('image\*.jpg');
 LengthFiles = length(files);
+
+thres_resize=0.2;
+length=uint16(thres_resize*360*0.6);
+height=uint16(thres_resize*300);
+thres_bw=0.31;
+
+identifyCreaseAngleThres=15;
+
 for i = 1:LengthFiles
-    img = imresize(imread(strcat('image/',files(i).name)),0.2);
-    palm=PalmExtraction(img,bw_thres);
-    figure,imshow(palm),title(files(i).name);
-    %自己写图像处理函数 ImgProc(Img);
+    img = imresize(imread(strcat('image/',files(i).name)),thres_resize);
+    img=PalmExtraction(img,thres_bw);
+    if ndims(img)>2
+        img=rgb2gray(img);
+    end
+    
+    gaborArray = gabor([13],[90],'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',5.0);
+    gaborMag = imgaborfilt(img,gaborArray);
+    
+    palm=gaborMag(:,:,1);
+    palm=imbinarize(palm);
+    palm=bwAreaFilter(palm,50);
+    
+    crease=findCrease(palm,length,height,5,identifyCreaseAngleThres)
+    [row,col]=size(crease);
+    figure,imshow(palm);
+    hold on;
+    for i=2:row
+        rect = rectangle('Position',[crease(i,1),crease(i,2),length,height]);
+        set(rect,'edgecolor','r');
+    end
 end
