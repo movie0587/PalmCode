@@ -4,13 +4,14 @@ if ndims(sourceImage)==3
     sourceImage=rgb2gray(sourceImage);
 end
 
-bw1 = edge(sourceImage,'log',0.003,2.25);
+bw1 = edge(sourceImage,'sobel');
 bw2 = edge(sourceImage,'prewitt');
 bw3 = edge(sourceImage,'roberts');
 bw4 = edge(sourceImage,'log');
 bw5 = edge(sourceImage,'canny');
 
-subplot(3,2,1); imshow(sourceImage); title('a');
+figure,
+subplot(3,2,1); imshow(sourceImage); title('source');
 subplot(3,2,2); imshow(bw1); title('sobel');
 subplot(3,2,3); imshow(bw2); title('prewitt');
 subplot(3,2,4); imshow(bw3); title('roberts');
