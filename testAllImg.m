@@ -12,33 +12,46 @@ thres_bw=0.31;
 
 identifyCreaseAngleThres=15;
 
+%%
 for i = 1:LengthFiles
     img = imresize(imread(strcat('image/',files(i).name)),thres_resize);
     img=PalmExtraction(img,thres_bw);
-    figure,imshow(img);
-%     if ndims(img)>2
-%         img=rgb2gray(img);
-%     end
-%     
-%     %     gaborArray = gabor([13],[90],'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',5.0);
-%     %     gaborMag = imgaborfilt(img,gaborArray);
-%     
-%     [row,col]=size(img);
-%     %225 240 45 | 330 315 300 135 120 105 90 75
-%     % [0 15 30 45 60 75 90 105 120 135 150 165 180 195 210 225 240 255 270 285 300 315 330 345 360]
-%     gaborArray = gabor([11],[45 90 130 170 225 240 315],...
-%         'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',3.5);
-%     
-%     gaborMag = imgaborfilt(img,gaborArray);
-%     palm2=zeros(size(img));
-%     
-%     for i=1:row
-%         for j=1:col
-%             palm2(i,j)=min(gaborMag(i,j,:));
-%         end
-%     end
-%     % figure,imshow(palm2);
-%     palm2=imbinarize(palm2,0.6);
-%     % palm2=bwAreaFilter(~palm2,50);
-%     figure,imshow(palm2);
+    %     imwrite(img,strcat('GaborResult/',files(i).name));
+    %     figure,imshow(img);
+    if ndims(img)>2
+        img=rgb2gray(img);
+    end
+    
+    %     gaborArray = gabor([13],[90],'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',5.0);
+    %     gaborMag = imgaborfilt(img,gaborArray);
+    
+    %% œﬂºÏ≤‚À„∑®
+%     bw = edge(img,'Sobel','both');
+%     bw = edge(img,'Prewitt','both');
+%     bw = edge(img,'Roberts',0.022,'both');
+%     bw = edge(img,'log',0.0025);
+    bw = edge(img,'zerocross',0.0022);
+%     bw = edge(img,'Canny',0.17);
+%     bw = edge(img,'approxcanny',0.15);
+    
+    palm2=img&bw;
+    imwrite(palm2,strcat('zerocross/',files(i).name));
+    %% Gabor
+    %     [row,col]=size(img);
+    %     gaborArray = gabor([11],[45 90 130 170 225 240 315],...
+    %         'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',3.5);
+    %
+    %     gaborMag = imgaborfilt(img,gaborArray);
+    %     palm2=zeros(size(img));
+    %
+    %     for indexRow=1:row
+    %         for indexCol=1:col
+    %             palm2(indexRow,indexCol)=min(gaborMag(indexRow,indexCol,:));
+    %         end
+    %     end
+    %     % figure,imshow(palm2);
+    %     palm2=imbinarize(palm2,0.6);
+    %     % palm2=bwAreaFilter(~palm2,50);
+    %     %     figure,imshow(palm2);
+%     imwrite(palm2,strcat('GaborResult/',files(i).name));
 end

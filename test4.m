@@ -30,7 +30,7 @@ for i=1:row
     end
 end
 % figure,imshow(palm2);
-palm2=~imbinarize(palm2,0.6);
+palm2=imbinarize(palm2,0.6);
 % palm2=bwAreaFilter(~palm2,50);
 figure,imshow(palm2);
 % palm2=bwAreaFilter(palm2,10);
