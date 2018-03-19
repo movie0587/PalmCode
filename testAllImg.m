@@ -30,12 +30,12 @@ for i = 1:LengthFiles
 %     bw = edge(img,'Prewitt','both');
 %     bw = edge(img,'Roberts',0.022,'both');
 %     bw = edge(img,'log',0.0025);
-    bw = edge(img,'zerocross',0.0022);
+%     bw = edge(img,'zerocross',0.0022);
 %     bw = edge(img,'Canny',0.17);
-%     bw = edge(img,'approxcanny',0.15);
+    bw = edge(img,'approxcanny',0.15);
     
     palm2=img&bw;
-    imwrite(palm2,strcat('zerocross/',files(i).name));
+    imwrite(palm2,strcat('approxcanny/',files(i).name));
     %% Gabor
     %     [row,col]=size(img);
     %     gaborArray = gabor([11],[45 90 130 170 225 240 315],...
