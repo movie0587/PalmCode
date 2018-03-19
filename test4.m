@@ -7,7 +7,7 @@ thres_bw=0.31;
 num=25;
 identifyCreaseAngleThres=15;
 
-I = imread('image\rtest_41.jpg');
+I = imread('palmImage\ltest_101.jpg');
 I=imresize(I,thres_resize);
 I=PalmExtraction(I,thres_bw);
 if ndims(I)>2
@@ -30,7 +30,7 @@ for i=1:row
     end
 end
 % figure,imshow(palm2);
-palm2=imbinarize(palm2,0.6);
+palm2=imbinarize(palm2,0.5);
 % palm2=bwAreaFilter(~palm2,50);
 figure,imshow(palm2);
 % palm2=bwAreaFilter(palm2,10);
