@@ -29,8 +29,8 @@ for i=1:row
         palm2(i,j)=min(gaborMag(i,j,:));
     end
 end
-% figure,imshow(palm2);
-palm2=imbinarize(palm2,0.5);
+figure,imshow(palm2);
+palm2=imbinarize(palm2,0.38);
 % palm2=bwAreaFilter(~palm2,50);
 figure,imshow(palm2);
 % palm2=bwAreaFilter(palm2,10);

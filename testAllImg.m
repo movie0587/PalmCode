@@ -40,7 +40,7 @@ for i = 1:LengthFiles
     %     imwrite(palm2,strcat('approxcanny/',files(i).name));
     %% Gabor
     [row,col]=size(img);
-    gaborArray = gabor([11],[45 90 130 170 225 240 315],...
+    gaborArray = gabor([11],[0 90],...
         'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',3.5);
     
     gaborMag = imgaborfilt(img,gaborArray);
@@ -52,8 +52,8 @@ for i = 1:LengthFiles
         end
     end
     % figure,imshow(palm2);
-    palm2=imbinarize(palm2,0.5);
+    palm2=imbinarize(palm2,0.38);
     % palm2=bwAreaFilter(~palm2,50);
-    %     figure,imshow(palm2);
-    imwrite(palm2,strcat('GaborResult/',files(i).name));
+    figure,imshow(palm2);
+    %     imwrite(palm2,strcat('GaborResult/',files(i).name));
 end
