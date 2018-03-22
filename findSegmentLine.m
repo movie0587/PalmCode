@@ -1,6 +1,7 @@
 function [one, two] = findSegmentLine(img);
 
 [row,col] = size(img);
+thres = col/2;
 
 for i = 1:row
     tline = img(i,:);
@@ -8,7 +9,7 @@ for i = 1:row
     con = diff([0 find(t~=1)]);
     maxLine = max(con);
     
-    if maxLine > 300
+    if maxLine > thres
         index = find(con == maxLine);
         
         t = find(tline==1);

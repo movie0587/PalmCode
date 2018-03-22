@@ -73,8 +73,8 @@ for i=1:row1
     end
 end
 % figure,imshow(palm_finger_gabor);
-palm_main_gabor_bw = imbinarize(palm_main_gabor,0.60);
-palm_main_gabor_bw = bwAreaFilter(palm_main_gabor_bw,10);
+palm_main_gabor_bw = imbinarize(palm_main_gabor,0.70);
+palm_main_gabor_bw = bwAreaFilter(palm_main_gabor_bw,40);
 figure,imshow(palm_main_gabor_bw);
 %%
 % c=corner(rgb2gray(test),10);

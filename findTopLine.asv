@@ -1,0 +1,11 @@
+function [one,two] = findTopLine(img,midLeft,midRight);
+
+[row,col] = size(img);
+left = midLeft.y;
+right = midRight.y;
+topLine = 0;
+for i = 1:midLeft.y
+    s = sum(img(i,left:right));
+    if s~=0
+        break;
+        
