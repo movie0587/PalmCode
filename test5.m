@@ -2,7 +2,7 @@ clc; clear all;
 %% 参数设置
 thres_extraction_bw=0.31;
 thres_resize=0.2;
-imagePath='palmImage/ltest_71.jpg';
+imagePath='palmImage/ltest_21.jpg';
 
 %% 手掌提取
 src=imread(imagePath);
@@ -24,9 +24,13 @@ palml2 = bwAreaFilter(~palm2,30);
 figure,imshow(palm2);
 hold on;
 %% 找出分割线
-[one, two] = findSegmentLine(palm2);
-plot(one.x, one.y, 'rO');
-plot(two.x, two.y, 'r*');
+[midLeft, midRight] = findSegmentLine(palm2);
+plot(midLeft.x, midLeft.y, 'rO');
+plot(midRight.x, midRight.y, 'r*');
+%% 底部的线
+[bottomLeft, bottomRight] = findBottomLine(palm2,midLeft,midRight);
+plot(bottomLeft.x, bottomLeft.y, 'rO');
+plot(bottomRight.x, bottomRight.y, 'r*');
 %% Gabor滤波
 % palm_gray=rgb2gray(palm);
 % figure,imshow(palm_gray),title('palmgray');
