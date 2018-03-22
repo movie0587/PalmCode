@@ -1,7 +1,7 @@
 function flag=identifyCrease(bw,lenRate,angleThres);
 
 if nargin<2
-    lenRate=10;
+    lenRate=20;
 end
 if nargin<3
     angleThres=15;
@@ -16,14 +16,13 @@ Lp2 = cat(1, stats.MinorAxisLength);
 angle = cat(1, stats.Orientation);
 Lp = Lp1./Lp2;
 
-index = find(Ap == max(Ap));
+% Ap=sort(Ap,'descend');
+% index = find(Ap == max(Ap));
 flag=0;
-if Lp(index)>lenRate
-    if angle(index)<angleThres & angle(index)>-angleThres
+for index=1:length(Ap)
+    if Lp(index)>lenRate & angle(index)<angleThres & angle(index)>-angleThres
         flag=1;
+        break;
     end
-else
-    flag=0;
 end
-
 

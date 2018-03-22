@@ -7,8 +7,9 @@ else
 end
 %% Ãæ»ýÂË²¨
 [L, num] = bwlabel(bw);
-stats = regionprops(L, 'Area');
+stats = regionprops(L, 'Area','orientation');
 Ap = cat(1, stats.Area);
+angle = cat(1,stats.Area);
 for i = 1 : num
     if Ap(i) < minArea
         bw(L == i) = 0;

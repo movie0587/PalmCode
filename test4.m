@@ -1,13 +1,13 @@
 clc; clear all;
 
 thres_resize=0.2;
-length=uint16(thres_resize*360*0.6);
+length=uint16(thres_resize*300);
 height=uint16(thres_resize*300);
 thres_bw=0.31;
 num=25;
 identifyCreaseAngleThres=15;
 
-I = imread('palmImage\ltest_101.jpg');
+I = imread('palmImage\rtest_61.jpg');
 I=imresize(I,thres_resize);
 I=PalmExtraction(I,thres_bw);
 if ndims(I)>2
@@ -18,7 +18,7 @@ end
 [row,col]=size(I);
 %225 240 45 | 330 315 300 135 120 105 90 75
 % [0 15 30 45 60 75 90 105 120 135 150 165 180 195 210 225 240 255 270 285 300 315 330 345 360]
-gaborArray = gabor([11],[45 90 130 170 225 240 315],...
+gaborArray = gabor([11],[0 45 90],...
     'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',3.5);
 
 gaborMag = imgaborfilt(I,gaborArray);
@@ -29,11 +29,11 @@ for i=1:row
         palm2(i,j)=min(gaborMag(i,j,:));
     end
 end
-figure,imshow(palm2);
-palm2=imbinarize(palm2,0.38);
+% figure,imshow(palm2);
+palm2=imbinarize(palm2,0.4);
 % palm2=bwAreaFilter(~palm2,50);
 figure,imshow(palm2);
-% palm2=bwAreaFilter(palm2,10);
+palm2=bwAreaFilter(palm2,20);
 % figure,imshow(palm2);
 %     figure,imshow(bwAreaFilter(palm2,5)),title(sprintf('bwfilter,arg=%f',i/10));
 % figure,imshow(adjgamma(hist_con(palm2)));
@@ -52,18 +52,18 @@ figure,imshow(palm2);
 palm=palm2;
 % % palm=gaborMag(:,:,1);
 % palm=imbinarize(palm);
-palm=bwAreaFilter(palm,10);
-palm=medfilt2(palm);
+% palm=bwAreaFilter(palm,30);
+% palm=medfilt2(palm);
 % % palm=imerode(palm,strel('line',2,0));
 % % figure,imshow(palm);
 % % palm=findCrease(palm,length,height,20,1.5);
 % % figure,imshow(palm);
 %
-% crease=findCrease(palm,length,height,5,identifyCreaseAngleThres)
-% [row,col]=size(crease);
-% figure,imshow(palm);
-% hold on;
-% for i=2:row
-%     rect = rectangle('Position',[crease(i,1),crease(i,2),length,height]);
-%     set(rect,'edgecolor','r');
-% end
+crease=findCrease(palm,length,height,6,identifyCreaseAngleThres)
+[row,col]=size(crease);
+figure,imshow(palm);
+hold on;
+for i=2:row
+    rect = rectangle('Position',[crease(i,1),crease(i,2),length,height]);
+    set(rect,'edgecolor','r');
+end

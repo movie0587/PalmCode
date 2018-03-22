@@ -2,7 +2,7 @@ clc; clear all;
 %% 参数设置
 thres_extraction_bw=0.31;
 thres_resize=0.2;
-imagePath='palmImage/rtest_41.jpg';
+imagePath='palmImage/ltest_71.jpg';
 
 %% 手掌提取
 src=imread(imagePath);
@@ -19,7 +19,14 @@ palm=PalmExtraction(src,thres_extraction_bw);
 % subplot(1,2,2),imshow(palm);
 % figure('name','提取出的手掌'),imshow(palm),title('提取出的手掌');
 % figure,imshow(palm.*otusThreshold(palm)),title('otus');
-figure,imshow(imbinarize(rgb2gray(palm),0.38));
+palm2 = imbinarize(rgb2gray(palm),0.34);
+palml2 = bwAreaFilter(~palm2,30);
+figure,imshow(palm2);
+hold on;
+%% 找出分割线
+[one, two] = findSegmentLine(palm2);
+plot(one.x, one.y, 'rO');
+plot(two.x, two.y, 'r*');
 %% Gabor滤波
 % palm_gray=rgb2gray(palm);
 % figure,imshow(palm_gray),title('palmgray');
