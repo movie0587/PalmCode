@@ -2,21 +2,21 @@ clc; clear all;
 %% 参数设置
 thres_extraction_bw=0.31;
 thres_resize=0.2;
-imagePath='palmImage/rtest_51.jpg';
+imagePath='palmImage/rtest_41.jpg';
 
 %% 手掌提取
 src=imread(imagePath);
-src=imresize(src,thres_resize);
+src_resize=imresize(src,thres_resize);
 % src_gray=rgb2gray(src);
 % figure('name','原图'),imshow((src)),title('原图');
 
-palm=PalmExtraction(src,thres_extraction_bw);
+palm=PalmExtraction(src_resize,thres_extraction_bw);
 % figure;
 % subplot(1,2,1),imshow(palm);
 % palm=imbinarize(rgb2gray(palm),0.25);
 % % subplot(1,2,1),imshow(palm);
 % palm=palm.*bw_filter(palm,1);
-% subplot(1,2,2),imshow(palm);
+% subplot(1,2,2),imshow(palm); 
 % figure('name','提取出的手掌'),imshow(palm),title('提取出的手掌');
 % figure,imshow(palm.*otusThreshold(palm)),title('otus');
 %% 进一步提取ROI，分出手指部分与下面的手掌部分
@@ -59,22 +59,57 @@ palm_gray = rgb2gray(palm);
 % figure,imshow(palm_finger_gabor_bw);
 
 %手掌部分
-palm_gray_main = palm_gray(midLeft.y:bottomLeft.y,midLeft.x:midRight.x);
+%取原图
+src_gray = rgb2gray(src);
+rate = uint16(1/thres_resize);
+palm_gray_main = src_gray(midLeft.y*rate:bottomLeft.y*rate,midLeft.x*rate:midRight.x*rate);
+palm_gray_main = imresize(palm_gray_main,0.1);
+% figure,imshow(palm_gray_main);
+
+% palm_gray_main = palm_gray(midLeft.y:bottomLeft.y,midLeft.x:midRight.x);
 % figure,imshow(palm_gray_main);
 [row1,col1] = size(palm_gray_main);
 palm_main_gabor = zeros(size(palm_gray_main));
 
-gaborArray = gabor([11],[0 45 60 90 135 330],'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',3.5);
+num=150;
+wl=[];
+for w=1:20
+    wl=[wl (w/10)+2];
+end
+sb=[];
+for s=1:0
+    sb=[sb (s/10)+1.2];
+end
+sr=[];
+for r=1:20
+    sr=[sr r+50];
+end
+
+gaborArray = gabor([3],[0 45 60 90 135 330],...
+    'SpatialFrequencyBandwidth',[1.5],'SpatialAspectRatio',63);
 gaborMag = imgaborfilt(palm_gray_main,gaborArray);
+
+% for p = 1:num
+%     palm=gaborMag(:,:,p);
+% %     palm=adjgamma(palm);%图像增强
+% %     palm=imbinarize(palm,0.6);
+%     figure,imshow(palm);
+%     theta = gaborArray(p).Orientation;
+%     lambda = gaborArray(p).Wavelength;
+%     bandWidth = gaborArray(p).SpatialFrequencyBandwidth;
+%     ratio = gaborArray(p).SpatialAspectRatio;
+%     title(sprintf('Orientation=%d, Wavelength=%f, bandWidth=%f, ratio=%f',...
+%         theta,lambda,bandWidth,ratio));
+% end
 
 for i=1:row1
     for j=1:col1
         palm_main_gabor(i,j)=min(gaborMag(i,j,:));
     end
 end
-% figure,imshow(palm_finger_gabor);
-palm_main_gabor_bw = imbinarize(palm_main_gabor,0.60);
-palm_main_gabor_bw = bwAreaFilter(palm_main_gabor_bw,10);
+figure,imshow(palm_main_gabor);
+palm_main_gabor_bw = imbinarize(palm_main_gabor,0.57);
+% palm_main_gabor_bw = bwAreaFilter(palm_main_gabor_bw,10);
 figure,imshow(palm_main_gabor_bw);
 %%
 % c=corner(rgb2gray(test),10);

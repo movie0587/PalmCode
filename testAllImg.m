@@ -74,7 +74,7 @@ for fileIndex = 1:LengthFiles
     palm_finger_gabor_bw = imbinarize(palm_finger_gabor,0.32);
     palm_finger_gabor_bw = bwAreaFilter(palm_finger_gabor_bw,15);
 %     figure,imshow(palm_finger_gabor_bw),title(files(fileIndex).name);
-    imwrite(palm_finger_gabor_bw,strcat('finalResult/palm_',files(fileIndex).name));
+    imwrite(palm_finger_gabor,strcat('finalResult/palm_',files(fileIndex).name));
     
     %手掌部分
     palm_gray_main = palm_gray(midLeft.y:bottomLeft.y,midLeft.x:midRight.x);
@@ -90,11 +90,11 @@ for fileIndex = 1:LengthFiles
             palm_main_gabor(i,j)=min(gaborMag(i,j,:));
         end
     end
-    % figure,imshow(palm_finger_gabor);
+    % figure,imshow(palm_main_gabor);
     palm_main_gabor_bw = imbinarize(palm_main_gabor,0.57);
     palm_main_gabor_bw = bwAreaFilter(palm_main_gabor_bw,30);
 %     figure,imshow(palm_main_gabor_bw),title(files(fileIndex).name);
-	imwrite(palm_main_gabor_bw,strcat('finalResult/main_',files(fileIndex).name));
+	imwrite(palm_main_gabor,strcat('finalResult/main_',files(fileIndex).name));
     %% 找出折痕
     %     crease=findCrease(palm2,length,height,5,identifyCreaseAngleThres)
     %     [row,col]=size(crease);
