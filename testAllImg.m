@@ -8,7 +8,7 @@ LengthFiles = length(files);
 thres_resize=0.2;
 length=uint16(thres_resize*300*0.9);
 height=uint16(thres_resize*300);
-thres_bw=0.31;
+thres_bw=0.31; 
 
 identifyCreaseAngleThres=15;
 
@@ -23,6 +23,7 @@ for fileIndex = 1:LengthFiles
     end
     
     palm2 = imbinarize(img,0.25);
+    palm_gray = img;
     %     palm2 = bwAreaFilter(palm2,30);
     %     figure,imshow(palm2),title(files(fileIndex).name);
     %     hold on;
@@ -43,22 +44,36 @@ for fileIndex = 1:LengthFiles
     %     gaborArray = gabor([13],[90],'SpatialFrequencyBandwidth',1.5,'SpatialAspectRatio',5.0);
     %     gaborMag = imgaborfilt(img,gaborArray);
     
+    %%
+    palm_gray_finger = palm_gray(topLeft.y:midLeft.y,midLeft.x:midRight.x);
+    palm_gray_main = palm_gray(midLeft.y:bottomLeft.y,midLeft.x:midRight.x);
+    
     %% 线检测算法
-    %     bw = edge(img,'Sobel','both');
-    %     bw = edge(img,'Prewitt','both');
-    %     bw = edge(img,'Roberts',0.022,'both');
-    %     bw = edge(img,'log',0.0025);
-    %     bw = edge(img,'zerocross',0.0022);
-    %     bw = edge(img,'Canny',0.17);
-    %     bw = edge(img,'approxcanny',0.15);
+    %手指
+%         bw = edge(palm_gray_finger,'Sobel',0.027,'both');
+%         bw = edge(palm_gray_finger,'Prewitt',0.023,'both');
+%         bw = edge(palm_gray_finger,'Roberts',0.023,'both');
+%         bw = edge(palm_gray_finger,'log',0.0025);
+%         bw = edge(palm_gray_finger,'zerocross',0.0022);
+%         bw = edge(palm_gray_finger,'Canny',0.17);
+    %     bw = edge(palm_gray_finger,'approxcanny',0.15);
     %
-    %     palm2=img&bw;
-    %     imwrite(palm2,strcat('approxcanny/',files(fileIndex).name));
+%     palm_finger_edge=palm_gray_finger&bw;
+%     imwrite(palm_finger_edge,strcat('edgeTest/canny/finger_',files(fileIndex).name));
+    
+    %手掌
+%     bw = edge(palm_gray_main,'Sobel',0.027,'both');
+%         bw = edge(palm_gray_main,'Prewitt',0.023,'both');
+%         bw = edge(palm_gray_main,'Roberts',0.023,'both');
+%         bw = edge(palm_gray_main,'log',0.0025);
+%         bw = edge(palm_gray_main,'zerocross',0.0022);
+%         bw = edge(palm_gray_main,'Canny',0.17);
+    %     bw = edge(palm_gray_main,'approxcanny',0.15);
+%     palm_main_edge=palm_gray_main&bw;
+%     imwrite(palm_main_edge,strcat('edgeTest/canny/main_',files(fileIndex).name));
     %% Gabor滤波
     %手指部分
-    palm_gray = img;
-    palm_gray_finger = palm_gray(topLeft.y:midLeft.y,midLeft.x:midRight.x);
-    % figure,imshow(palm_gray_finger);
+%     figure,imshow(palm_gray_finger);
     [row,col] = size(palm_gray_finger);
     palm_finger_gabor = zeros(size(palm_gray_finger));
     
@@ -71,14 +86,14 @@ for fileIndex = 1:LengthFiles
         end
     end
     % figure,imshow(palm_finger_gabor);
-    palm_finger_gabor_bw = imbinarize(palm_finger_gabor,0.32);
+%     level = graythresh(palm_finger_gabor);
+    palm_finger_gabor_bw = imbinarize(palm_finger_gabor,0.36);
     palm_finger_gabor_bw = bwAreaFilter(palm_finger_gabor_bw,15);
 %     figure,imshow(palm_finger_gabor_bw),title(files(fileIndex).name);
-    imwrite(palm_finger_gabor,strcat('finalResult/palm_',files(fileIndex).name));
+    imwrite(~palm_finger_gabor_bw,strcat('finalResult/otus/palm_',files(fileIndex).name));
     
     %手掌部分
-    palm_gray_main = palm_gray(midLeft.y:bottomLeft.y,midLeft.x:midRight.x);
-    % figure,imshow(palm_gray_main);
+%     figure,imshow(palm_gray_main);
     [row1,col1] = size(palm_gray_main);
     palm_main_gabor = zeros(size(palm_gray_main));
     
@@ -91,10 +106,11 @@ for fileIndex = 1:LengthFiles
         end
     end
     % figure,imshow(palm_main_gabor);
-    palm_main_gabor_bw = imbinarize(palm_main_gabor,0.57);
+    level = graythresh(palm_main_gabor);
+    palm_main_gabor_bw = imbinarize(palm_main_gabor,level-0.03);
     palm_main_gabor_bw = bwAreaFilter(palm_main_gabor_bw,30);
 %     figure,imshow(palm_main_gabor_bw),title(files(fileIndex).name);
-	imwrite(palm_main_gabor,strcat('finalResult/main_',files(fileIndex).name));
+	imwrite(~palm_main_gabor_bw,strcat('finalResult/otus/main_',files(fileIndex).name));
     %% 找出折痕
     %     crease=findCrease(palm2,length,height,5,identifyCreaseAngleThres)
     %     [row,col]=size(crease);

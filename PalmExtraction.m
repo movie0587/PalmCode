@@ -24,7 +24,8 @@ out=out.*flags;
 % figure,imshow(out);
 
 %% 二值图像去噪函数(提取最大连通域)
-bw_maxArea=bw_filter(imbinarize(rgb2gray(source),thres_bw),1);
+bw=imbinarize(rgb2gray(source),thres_bw);
+bw_maxArea=bw_filter(bw,1);
 bw_maxArea=imdilate(bw_maxArea,strel('square',30));
 bw_maxArea=imclose(bw_maxArea,strel('disk',50));
 out=out.*bw_maxArea;

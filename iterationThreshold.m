@@ -1,4 +1,4 @@
-function out = iterationThreshold(source);
+function level = iterationThreshold(source);
 
 %读入图像,并进行灰度转换
 % source=imread('test.jpg');
@@ -14,12 +14,11 @@ d=false;
 while~d
     g=B>=T;
     Tn=0.5*(mean(B(g))+mean(B(~g)));
-    d=abs(T-Tn)<0.5;
+    d=abs(T-Tn)<0.005;
     T=Tn;
 end
 % 根据最佳阈值进行图像分割
-level=Tn/255;
-out=im2bw(B,level);
+level=Tn;
 % 显示分割结果
 % subplot(121),imshow(A)
 % subplot(122),imshow(BW)

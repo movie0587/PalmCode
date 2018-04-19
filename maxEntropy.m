@@ -1,4 +1,4 @@
-function out = maxEntropy(source);
+function th = maxEntropy(source);
 
 %一维最大熵法
 % source = imread('test.jpg');
@@ -13,6 +13,7 @@ Ht=-cumsum(p.*log(p));%计算出选择不同t值时，A区域的熵
 HL=-sum(p.*log(p));%计算出全图的熵
 Yt=log(Pt.*(1-Pt)+eps)+Ht./(Pt+eps)+(HL-Ht)./(1-Pt+eps);%计算出选择不同t值时，判别函数的值
 [a,th]=max(Yt);%th即为最佳阈值
-out=(source>th);
+th=th/255;
+% out=(source>th);
 % edgeTest(segImg);
 % figure,imshow(out);
