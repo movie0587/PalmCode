@@ -66,7 +66,7 @@ end
 % figure,imshow(palm_finger_gabor);
 palm_finger_gabor_bw = imbinarize(palm_finger_gabor,0.32);
 palm_finger_gabor_bw = bwAreaFilter(palm_finger_gabor_bw,15);
-figure,imshow(~palm_finger_gabor_bw);
+% figure,imshow(~palm_finger_gabor_bw);
 
 %手掌部分
 %取原图
@@ -108,7 +108,13 @@ end
 level = graythresh(palm_main_gabor);
 palm_main_gabor_bw = imbinarize(palm_main_gabor,level);
 palm_main_gabor_bw = bwAreaFilter(palm_main_gabor_bw,10);
-figure,imshow(~palm_main_gabor_bw);
+% figure,imshow(~palm_main_gabor_bw);
+%% 合并 将手指和掌心合并到原图像
+level1 = graythresh(palm_gray);
+palm_bw = imbinarize(palm_gray,level1);
+palm_bw(topLeft.y:midLeft.y,midLeft.x:midRight.x) = palm_finger_gabor_bw(:,:);
+palm_bw(midLeft.y:bottomLeft.y,midLeft.x:midRight.x) = palm_main_gabor_bw(:,:);
+figure,imshow(~palm_bw);
 %%
 % c=corner(rgb2gray(test),10);
 % figure,imshow(test);
